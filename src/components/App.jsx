@@ -24,32 +24,57 @@ export class App extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    const { name, number } = this.state;
+    const { name, number, contacts } = this.state;
+    if (
+      contacts.find(
+        contact => contact.name.toLowerCase() === name.toLowerCase()
+      )
+    ) {
+      alert(`${name} is already in contacts.`);
+      return;
+    }
     const id = nanoid();
     const contact = { id, name, number };
     console.log(contact);
-    this.setState({ contacts: [...this.state.contacts, contact] });
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, contact],
+    }));
 
-    // this.setState({
-    //   name: '',
-    //   number: '',
-    // });
+    this.setState({
+      name: '',
+      number: '',
+    });
+  };
 
-    // console.log(this.state);
+  handleDelete = event => {
+    event.preventDefault();
+    const idToDelete = event.target.id;
+    const { contacts } = this.state;
+    const indexToDelete = contacts.findIndex(
+      contact => contact.id === idToDelete
+    );
+    contacts.splice(indexToDelete, 1);
+    this.setState({ contacts: contacts });
   };
 
   render() {
-    const { contacts, filter } = this.state;
+    const { contacts, filter, name, number } = this.state;
     return (
       <div>
         <h1>Phonebook</h1>
         <ContactForm
+          name={name}
+          number={number}
           onChangeHandle={this.handleChange}
           onSubmitHandle={this.handleSubmit}
         />
         <h2>Contacts</h2>
         <Filter onChangeHandle={this.handleChange} />
-        <ContactList contacts={contacts} filter={filter} />
+        <ContactList
+          contacts={contacts}
+          filter={filter}
+          onDeleteHandle={this.handleDelete}
+        />
       </div>
     );
   }

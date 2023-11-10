@@ -3,7 +3,7 @@ import { ContactListItem } from 'components/ContactListItem/ContactListItem';
 
 export class ContactList extends Component {
   render() {
-    const { contacts, filter } = this.props;
+    const { contacts, filter, onDeleteHandle } = this.props;
     return (
       <ul>
         {contacts
@@ -15,6 +15,8 @@ export class ContactList extends Component {
               name={contact.name}
               number={contact.number}
               key={contact.id}
+              id={contact.id}
+              onDeleteHandle={onDeleteHandle}
             />
           ))}
       </ul>

@@ -7,7 +7,7 @@ export class ContactForm extends Component {
   phoneInputId = nanoid();
 
   render() {
-    const { onChangeHandle, onSubmitHandle } = this.props;
+    const { onChangeHandle, onSubmitHandle, name, number } = this.props;
     return (
       <form className={css.form} onSubmit={onSubmitHandle}>
         <label className={css.formLabel} htmlFor={this.nameInputId}>
@@ -16,10 +16,11 @@ export class ContactForm extends Component {
         <input
           className={css.formInput}
           type="text"
+          pattern="[a-zA-Z\s'\-]*"
           name="name"
           id={this.nameInputId}
           onChange={onChangeHandle}
-          pattern="^[a-zA-Za-яА-Я]+(([' -][a-zA-Za-яА-Я ])?[a-zA-Za-яА-Я]*)*$"
+          value={name}
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
         />
@@ -32,6 +33,7 @@ export class ContactForm extends Component {
           name="number"
           id={this.phoneInputId}
           onChange={onChangeHandle}
+          value={number}
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
