@@ -13,8 +13,6 @@ export class App extends Component {
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
     filter: '',
-    name: '',
-    number: '',
   };
 
   handleChange = event => {
@@ -22,28 +20,21 @@ export class App extends Component {
     this.setState({ [name]: value });
   };
 
-  handleSubmit = event => {
-    event.preventDefault();
-    const { name, number, contacts } = this.state;
+  handleAddContact = contact => {
+    const { contacts } = this.state;
     if (
       contacts.find(
-        contact => contact.name.toLowerCase() === name.toLowerCase()
+        ({ name }) => name.toLowerCase() === contact.name.toLowerCase()
       )
     ) {
-      alert(`${name} is already in contacts.`);
+      alert(`${contact.name} is already in contacts :)`);
       return;
     }
     const id = nanoid();
-    const contact = { id, name, number };
     console.log(contact);
     this.setState(prevState => ({
-      contacts: [...prevState.contacts, contact],
+      contacts: [...prevState.contacts, { id, ...contact }],
     }));
-
-    this.setState({
-      name: '',
-      number: '',
-    });
   };
 
   handleDelete = event => {
@@ -58,16 +49,11 @@ export class App extends Component {
   };
 
   render() {
-    const { contacts, filter, name, number } = this.state;
+    const { contacts, filter } = this.state;
     return (
       <div>
         <h1>Phonebook</h1>
-        <ContactForm
-          name={name}
-          number={number}
-          onChangeHandle={this.handleChange}
-          onSubmitHandle={this.handleSubmit}
-        />
+        <ContactForm onSubmitHandle={this.handleAddContact} />
         <h2>Contacts</h2>
         <Filter onChangeHandle={this.handleChange} />
         <ContactList

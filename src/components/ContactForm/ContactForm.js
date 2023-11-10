@@ -3,13 +3,35 @@ import css from './ContactForm.module.css';
 import { nanoid } from 'nanoid';
 
 export class ContactForm extends Component {
+  state = {
+    name: '',
+    number: '',
+  };
+
   nameInputId = nanoid();
   phoneInputId = nanoid();
 
+  reset = () => {
+    this.setState({ number: '', name: '' });
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    this.props.onSubmitHandle({
+      name: this.state.name,
+      number: this.state.number,
+    });
+    this.reset();
+  };
+
+  handleChange = event => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
+
   render() {
-    const { onChangeHandle, onSubmitHandle, name, number } = this.props;
     return (
-      <form className={css.form} onSubmit={onSubmitHandle}>
+      <form className={css.form} onSubmit={this.handleSubmit}>
         <label className={css.formLabel} htmlFor={this.nameInputId}>
           Name
         </label>
@@ -19,8 +41,8 @@ export class ContactForm extends Component {
           pattern="[a-zA-Z\s'\-]*"
           name="name"
           id={this.nameInputId}
-          onChange={onChangeHandle}
-          value={name}
+          onChange={this.handleChange}
+          value={this.state.name}
           title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
           required
         />
@@ -32,10 +54,10 @@ export class ContactForm extends Component {
           type="tel"
           name="number"
           id={this.phoneInputId}
-          onChange={onChangeHandle}
-          value={number}
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          onChange={this.handleChange}
+          value={this.state.number}
+          pattern="[0-9\s\-]+"
+          title="Phone number must be digits and can contain spaces and dashes"
           required
         />
         <button className={css.formButton} type="submit">
