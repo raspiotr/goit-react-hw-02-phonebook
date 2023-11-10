@@ -33,7 +33,7 @@ ContactList.propTypes = {
       name: PropTypes.string.isRequired,
       number: PropTypes.string.isRequired,
     })
-  ),
+  ).isRequired,
   filter: PropTypes.string.isRequired,
   onDeleteHandle: PropTypes.func.isRequired,
 };
